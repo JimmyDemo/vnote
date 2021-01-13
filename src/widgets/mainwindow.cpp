@@ -29,7 +29,7 @@
 #include <core/coreconfig.h>
 #include <core/events.h>
 #include <core/fileopenparameters.h>
-#include <widgets/dialogs/scrolldialog.h>
+#include <widgets/dialogs/exportdialog.h>
 #include "viewwindow.h"
 #include "outlineviewer.h"
 #include <utils/widgetutils.h>
@@ -57,6 +57,9 @@ MainWindow::MainWindow(QWidget *p_parent)
     // Note that no user interaction is possible in this state.
     connect(qApp, &QCoreApplication::aboutToQuit,
             this, &MainWindow::closeOnQuit);
+
+    connect(&VNoteX::getInst(), &VNoteX::exportRequested,
+            this, &MainWindow::exportNotes);
 }
 
 MainWindow::~MainWindow()
@@ -581,4 +584,10 @@ void MainWindow::updateTabBarStyle()
     Q_FOREACH(QTabBar* tabBar, this->findChildren<QTabBar*>(QString(), Qt::FindDirectChildrenOnly)) {
         tabBar->setDrawBase(false);
     }
+}
+
+void MainWindow::exportNotes()
+{
+    ExportDialog dialog(this);
+    dialog.exec();
 }
